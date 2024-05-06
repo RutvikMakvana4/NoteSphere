@@ -16,6 +16,11 @@ const Login = () => {
       setError("Please enter a valid email address.");
       return;
     }
+
+    if (!password) {
+      setError("Please enter the password");
+      return;
+    }
   };
 
   return (
@@ -39,7 +44,9 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button type="sumit" className="btn-primary">
+            {error && <p className="text-red-500 text-xs pb-1" >{error}</p>}
+
+            <button type="submit" className="btn-primary">
               Login
             </button>
 
