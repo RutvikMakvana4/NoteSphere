@@ -16,7 +16,7 @@ const TagInput = ({ tags, setTags }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.handleKeyDown === "Enter") {
+    if (e.key === "Enter") {
       addNewTag();
     }
   };
@@ -29,7 +29,7 @@ const TagInput = ({ tags, setTags }) => {
     <div>
       {tags?.length > 0 && (
         <div className="flex items-center gap-2 flex-wrap mt-2">
-          {tags.map((tag, index) => {
+          {tags.map((tag, index) => (
             <span
               key={index}
               className="flex items-center gap-2 text-sm text-slate-900 bg-slate-100 px-3 py-1 rounded"
@@ -42,8 +42,8 @@ const TagInput = ({ tags, setTags }) => {
               >
                 <MdClose />
               </button>
-            </span>;
-          })}
+            </span>
+          ))}
         </div>
       )}
 
