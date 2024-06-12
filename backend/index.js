@@ -3,6 +3,7 @@ import express from "express";
 import path from "path";
 import "./src/common/config/dbConnection";
 import mainRouter from "./routers/index";
+import swaggerSetup from "./src/common/swagger";
 import session from "express-session";
 import { JWT } from "./src/common/constants/constants";
 
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use(mainRouter);
+app.use(swaggerSetup);
 
 app.use(express.static(path.join(__dirname + "/public"))); // Static path to show image in crome
 
