@@ -172,3 +172,38 @@ paths:
           $ref: "#/components/responses/Success"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+
+  /note/add-note:
+    post:
+      summary: Add Note
+      description: |
+        - Add Note
+      tags:
+        - Note
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: test
+                content:
+                  type: string
+                  example: test of content
+                tags:
+                  type: array
+                  example: ["viral", "trending"]
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"

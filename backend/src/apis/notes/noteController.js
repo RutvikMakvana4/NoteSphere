@@ -8,7 +8,7 @@ class noteController {
    * @returns
    */
   static async addNote(req, res) {
-    const data = await noteServices.addNote(req.body, req, res);
+    const data = await noteServices.addNote(req.body, req.user, req, res);
     return res.send({ message: "Add Notes successfully", data });
   }
 

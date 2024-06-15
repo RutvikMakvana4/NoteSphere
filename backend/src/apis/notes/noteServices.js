@@ -1,4 +1,6 @@
 import Note from "../../../model/note";
+import { BadRequestException } from "../../common/exceptions/errorException";
+import NoteResource from "./resources/noteResource";
 
 class noteServices {
   /**
@@ -8,7 +10,20 @@ class noteServices {
    * @param {*} res
    * @returns
    */
-  static async addNote(data, req, res) {}
+  static async addNote(data, auth, req, res) {
+    try {
+      const createNote = await Note.create({
+        ...data,
+        userId: auth,
+      });
+
+      return {
+        ...new NoteResource(createNote),
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   /**
    * @description: Edit Note

@@ -6,6 +6,7 @@ import mainRouter from "./routers/index";
 import swaggerSetup from "./src/common/swagger";
 import session from "express-session";
 import { JWT } from "./src/common/constants/constants";
+import "./src/common/config/jwtPassport";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(mainRouter);
 app.use(swaggerSetup);
 
 app.use(express.static(path.join(__dirname + "/public"))); // Static path to show image in crome
+app.use(require("./src/common/middleware/error"));
 
 app.listen(PORT, (err) => {
   if (err) throw new console.log("Server not connect");
