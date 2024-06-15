@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
+import { validateEmail } from "../../utils/helper";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -28,6 +32,44 @@ const SignUp = () => {
     }
 
     setError(" ");
+
+    //SignUp API Call
+    try {
+      const response = await axiosInstance.post("/auth/register", {
+        fullName: name,
+        email: email,
+        password: password,
+      });
+
+      //Handle successfull register response
+      if (response.data && response.data.error) {
+        setError(response.data.messaage);
+        return;
+      }
+
+      if (
+        response.data &&
+        response.data.data &&
+        response.data.data.authentication.accessToken
+      ) {
+        localStorage.setItem(
+          "token",
+          response.data.data.authentication.accessToken
+        );
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.messaage
+      ) {
+        setError(error.response.data.messaage);
+      } else {
+        console.log(error);
+        setError("An unexcepted error occurred. please try again.");
+      }
+    }
   };
 
   return (
@@ -43,7 +85,7 @@ const SignUp = () => {
               placeholder="Name"
               className="input-box"
               value={name}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
 
             <input
