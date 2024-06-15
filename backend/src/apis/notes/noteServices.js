@@ -1,6 +1,7 @@
 import Note from "../../../model/note";
 import { BadRequestException } from "../../common/exceptions/errorException";
 import NoteResource from "./resources/noteResource";
+import NoteListResource from "./resources/noteListResource";
 
 class noteServices {
   /**
@@ -33,8 +34,6 @@ class noteServices {
    * @returns
    */
   static async editNote(id, data, auth, req, res) {
-    console.log(id);
-    console.log(data);
     try {
       const updatedNote = await Note.findOneAndUpdate(
         { _id: id },
@@ -43,8 +42,6 @@ class noteServices {
         },
         { new: true }
       );
-
-      console.log(updatedNote);
 
       return {
         ...new NoteResource(updatedNote),
@@ -59,7 +56,34 @@ class noteServices {
    * @param {*} req
    * @returns
    */
-  static async deletNote(req) {}
+  static async deletNote(id, auth, req, res) {
+    await Note.findByIdAndDelete(id);
+    return;
+  }
+
+  /**
+   * @description: Note List
+   * @param {*} query
+   * @param {*} req
+   * @param {*} res
+   */
+  static async noteList(query, req, res) {
+    const page = parseInt(query.page) - 1 || 0;
+    const pageLimit = parseInt(query.limit) || 20;
+
+    const noteList = await Note.find({});
+
+    const totalDocument = await Note.find({}).countDocuments();
+
+    const meta = {
+      total: totalDocument,
+      perPage: pageLimit,
+      currentPage: page + 1,
+      lastPage: Math.ceil(totalDocument / pageLimit),
+    };
+
+    return { data: new NoteListResource(noteList).notes, meta };
+  }
 }
 
 export default noteServices;

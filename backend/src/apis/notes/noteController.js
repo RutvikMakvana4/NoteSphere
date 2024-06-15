@@ -36,8 +36,23 @@ class noteController {
    * @returns
    */
   static async deletNote(req, res) {
-    await noteServices.deletNote(req);
+    await noteServices.deletNote(req.params.id, req.user, req, res);
     return res.send({ message: "Delete Notes successfully" });
+  }
+
+  /**
+   * @description: Note List
+   * @param {*} req
+   * @param {*} res
+   * @returns
+   */
+  static async noteList(req, res) {
+    const { data, meta } = await noteServices.noteList(req.query, req, res);
+    return res.send({
+      message: "All notes retrived successfully",
+      data: data,
+      meta: meta,
+    });
   }
 }
 

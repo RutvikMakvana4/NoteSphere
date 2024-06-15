@@ -26,4 +26,6 @@ routes.delete(
   asyncWrap(noteController.deletNote)
 );
 
+routes.get("/note-list", authentication, asyncWrap(noteController.noteList));
+
 module.exports = routes;
