@@ -32,7 +32,27 @@ class noteServices {
    * @param {*} res
    * @returns
    */
-  static async editNote(data, req, res) {}
+  static async editNote(id, data, auth, req, res) {
+    console.log(id);
+    console.log(data);
+    try {
+      const updatedNote = await Note.findOneAndUpdate(
+        { _id: id },
+        {
+          ...data,
+        },
+        { new: true }
+      );
+
+      console.log(updatedNote);
+
+      return {
+        ...new NoteResource(updatedNote),
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   /**
    * @description: Delete Note

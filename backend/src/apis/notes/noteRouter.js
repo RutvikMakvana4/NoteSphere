@@ -14,10 +14,14 @@ routes.post(
   asyncWrap(noteController.addNote)
 );
 
-routes.put("/edit-note/:noteId", asyncWrap(noteController.editNote));
+routes.put(
+  "/edit-note/:id",
+  authentication,
+  asyncWrap(noteController.editNote)
+);
 
 routes.delete(
-  "/delete-note/:noteId",
+  "/delete-note/:id",
   authentication,
   asyncWrap(noteController.deletNote)
 );

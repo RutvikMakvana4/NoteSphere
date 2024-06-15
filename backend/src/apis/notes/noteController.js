@@ -19,7 +19,13 @@ class noteController {
    * @returns
    */
   static async editNote(req, res) {
-    const data = await noteServices.editNote(req.body, req, res);
+    const data = await noteServices.editNote(
+      req.params.id,
+      req.body,
+      req.user,
+      req,
+      res
+    );
     return res.send({ message: "Edit Notes successfully", data });
   }
 
