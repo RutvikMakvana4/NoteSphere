@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
+import cors from "cors";
 import "./src/common/config/dbConnection";
 import mainRouter from "./routers/index";
 import swaggerSetup from "./src/common/swagger";
@@ -14,6 +15,12 @@ const PORT = process.env.PORT || 8005;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(
   session({
