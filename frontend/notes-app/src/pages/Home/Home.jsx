@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -14,9 +16,34 @@ const Home = () => {
     data: null,
   });
 
+  const [userInfo, setUserInfo] = useState(null);
+
+  const navigate = useNavigate();
+
+  // Get User Info
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/user/profile");
+      if (response.data && response.data.data) {
+        console.log(response.data.data, "userdata");
+        setUserInfo(response.data.data);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+    return () => {};
+  }, []);
+
   return (
     <>
-      <Navbar />
+      <Navbar userInfo={userInfo} />
 
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
@@ -53,12 +80,12 @@ const Home = () => {
         contentLabel=""
         className="w-[40%]  max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll "
       >
-        <AddEditNotes 
-        type={openAddEditModal.type}
-        noteData={openAddEditModal.data}
-        onClose={() => {
-          setOpenAddEditModal({ isShown: false, type: "add", data: null });
-        }}
+        <AddEditNotes
+          type={openAddEditModal.type}
+          noteData={openAddEditModal.data}
+          onClose={() => {
+            setOpenAddEditModal({ isShown: false, type: "add", data: null });
+          }}
         />
       </Modal>
     </>
