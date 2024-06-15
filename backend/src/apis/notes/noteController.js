@@ -47,7 +47,12 @@ class noteController {
    * @returns
    */
   static async noteList(req, res) {
-    const { data, meta } = await noteServices.noteList(req.query, req, res);
+    const { data, meta } = await noteServices.noteList(
+      req.query,
+      req.user,
+      req,
+      res
+    );
     return res.send({
       message: "All notes retrived successfully",
       data: data,

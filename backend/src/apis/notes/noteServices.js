@@ -67,13 +67,13 @@ class noteServices {
    * @param {*} req
    * @param {*} res
    */
-  static async noteList(query, req, res) {
+  static async noteList(query, auth, req, res) {
     const page = parseInt(query.page) - 1 || 0;
     const pageLimit = parseInt(query.limit) || 20;
 
-    const noteList = await Note.find({});
+    const noteList = await Note.find({ userId: auth });
 
-    const totalDocument = await Note.find({}).countDocuments();
+    const totalDocument = await Note.find({ userId: auth }).countDocuments();
 
     const meta = {
       total: totalDocument,

@@ -9,6 +9,7 @@ export default class NoteListResource {
               content: data.content,
               tags: data.tags,
               isPinned: data.isPinned,
+              createdOn: data.createdAt,
             };
           })
         : null;

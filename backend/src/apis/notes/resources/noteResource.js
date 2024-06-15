@@ -5,5 +5,6 @@ export default class NoteResource {
     this.content = data.content;
     this.tags = data.tags;
     this.isPinned = data.isPinned;
+    this.createdOn = data.createdAt;
   }
 }
