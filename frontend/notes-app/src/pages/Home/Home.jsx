@@ -76,6 +76,32 @@ const Home = () => {
     }
   };
 
+  // Delete Note
+  const deleteNote = async (data) => {
+    const noteId = data._id;
+
+    try {
+      const response = await axiosInstance.delete(
+        "/note/delete-note/" + noteId
+      );
+
+      console.log(response, "res");
+
+      if (response.data && response.data.message) {
+        showToastMessage("Note Deleted Successfully", "delete");
+        getAllNotes();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.log("An unexcepted error occured. Pleasetry again.");
+      }
+    }
+  };
+
   useEffect(() => {
     getAllNotes();
     getUserInfo();
@@ -97,7 +123,7 @@ const Home = () => {
               tags={item.tags}
               isPinned={item.isPinned}
               onEdit={() => handleEdit(item)}
-              onDelete={() => {}}
+              onDelete={() => deleteNote(item)}
               onPinNote={() => {}}
             />
           ))}
