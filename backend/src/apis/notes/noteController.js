@@ -59,6 +59,26 @@ class noteController {
       meta: meta,
     });
   }
+
+  /**
+   * @description: Search Note
+   * @param {*} req
+   * @param {*} res
+   * @returns
+   */
+  static async searchNote(req, res) {
+    const { data, meta } = await noteServices.searchNote(
+      req.query,
+      req.user,
+      req,
+      res
+    );
+    return res.send({
+      message: "Notes matching the search query retrived successfully",
+      data: data,
+      meta: meta,
+    });
+  }
 }
 
 export default noteController;

@@ -84,6 +84,45 @@ class noteServices {
 
     return { data: new NoteListResource(noteList).notes, meta };
   }
+
+  /**
+   * @description: Search Notes
+   * @param {*} query
+   * @param {*} req
+   * @param {*} res
+   */
+  static async searchNote(query, auth, req, res) {
+    const page = parseInt(query.page) - 1 || 0;
+    const pageLimit = parseInt(query.limit) || 20;
+    const search = query.search;
+
+    let searchQuery = {};
+
+    if (search) {
+      searchQuery = {
+        $or: [
+          { title: { $regex: ".*" + search + ".*", $options: "i" } },
+          { content: { $regex: ".*" + search + ".*", $options: "i" } },
+        ],
+      };
+    }
+
+    const noteList = await Note.find({
+      userId: auth,
+      ...searchQuery,
+    });
+
+    const totalDocument = await Note.find({ userId: auth }).countDocuments();
+
+    const meta = {
+      total: totalDocument,
+      perPage: pageLimit,
+      currentPage: page + 1,
+      lastPage: Math.ceil(totalDocument / pageLimit),
+    };
+
+    return { data: new NoteListResource(noteList).notes, meta };
+  }
 }
 
 export default noteServices;

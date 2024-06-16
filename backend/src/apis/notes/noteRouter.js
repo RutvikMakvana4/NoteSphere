@@ -28,4 +28,10 @@ routes.delete(
 
 routes.get("/note-list", authentication, asyncWrap(noteController.noteList));
 
+routes.post(
+  "/search-notes",
+  authentication,
+  asyncWrap(noteController.searchNote)
+);
+
 module.exports = routes;
